@@ -1,0 +1,6 @@
+[submodule "DTChat"]
+	path = DTChat
+	url = https://github.com/DTN-MTP/DTChat
+[submodule "bp-socket"]
+	path = bp-socket
+	url = https://github.com/DTN-MTP/bp-socket
