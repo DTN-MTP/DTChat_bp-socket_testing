@@ -53,17 +53,36 @@ Vagrant.configure("2") do |config|
     ud3tn.vm.provider :libvirt do |libvirt|
       libvirt.cpus = 2
       libvirt.memory = 2048
+      libvirt.graphics_type = "vnc"
+      libvirt.video_type = "qxl"
+      libvirt.keymap = "en-us"
     end
 
     ud3tn.vm.synced_folder ".", "/vagrant", type: "rsync", disable: true
     ud3tn.vm.network :private_network, ip: "192.168.50.20", libvirt__netmask: "255.255.255.0"
     ud3tn.vm.hostname = "ud3tn-node"
 
+    ud3tn.vm.provision "shell", reboot: true, inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get full-upgrade -y
+    EOF
+
+        # Install GUI
     ud3tn.vm.provision "shell", inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get install -y xfce4 xfce4-goodies lightdm qemu-guest-agent
+      systemctl enable lightdm
+    EOF
+
+
+    ud3tn.vm.provision "shell", inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
       apt-get update
       apt-get install -y curl git ca-certificates make build-essential libsqlite3-dev sqlite3 python3.11-venv
 
-      git clone --recursive https://gitlab.com/d3tn/ud3tn.git	
+      git clone --recursive https://gitlab.com/d3tn/ud3tn.git
       cd ud3tn
       make posix -j8
       make virtualenv
