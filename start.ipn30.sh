@@ -1,5 +1,5 @@
 # cd /vagrant/configs
-cd /vagrant/bp-socket/configs
+cd /vagrant/
 export LD_LIBRARY_PATH="/usr/local/lib"
 ionstart -I ./host2.rc
 

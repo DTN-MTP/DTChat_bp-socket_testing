@@ -85,7 +85,7 @@ Vagrant.configure("2") do |config|
     ud3tn.vm.provision "shell", inline: <<-EOF
       export DEBIAN_FRONTEND=noninteractive
       apt-get update
-      apt-get install -y curl git ca-certificates make build-essential libsqlite3-dev sqlite3 python3.11-venv
+      apt-get install -y curl git ca-certificates make build-essential libsqlite3-dev sqlite3 python3.11-venv libjansson-dev
 
       git clone --recursive https://gitlab.com/d3tn/ud3tn.git
       cd ud3tn
