@@ -4,6 +4,3 @@
 [submodule "bp-socket"]
 	path = bp-socket
 	url = https://github.com/DTN-MTP/bp-socket
-[submodule "A-SABR"]
-	path = A-SABR
-	url = https://github.com/husseinom/A-SABR.git
