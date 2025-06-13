@@ -11,7 +11,7 @@ Bp-socket consists of two key components:
 
 # DTChat Bundle Protocol Testing
 
-This project provides a comprehensive testing environment for the DTChat application using Bundle Protocol (BP) communication across multiple nodes. The setup demonstrates inter-node communication between ION-DTN and µD3TN implementations through a virtualized network infrastructure.
+This project provides a comprehensive testing environment for the DTChat application using Bundle Protocol (BP) communication across multiple nodes. The setup demonstrates inter-node communication between ION-DTN and IPN30-DTN implementations through a virtualized network infrastructure.Each node has a GUI for DTChat.
 
 ## Presentation
 
@@ -37,40 +37,42 @@ The bp-socket component provides kernel-level Bundle Protocol socket support, en
 vagrant up
 ```
 
-2. **Enable file synchronization (optional):**
+2. **Enable file synchronization (Optional):**
+Enable automatic file synchronization on `ion-node`
 ```bash
 vagrant rsync-auto
 ```
+> Make sure to keep this process running in a separate terminal during development.
+
 
 3. **Setup each VM with startup scripts:**
 
 **ION Node:**
 ```bash
-vagrant ssh ion
-sudo -i
+vagrant ssh -c "sudo -i" ion
 source /vagrant/start.ion.sh
 ```
 
-**µD3TN Node:**
+**IPN30 Node:**
+```bash
+vagrant ssh -c "sudo -i" ipn30
+source /vagrant/start.ipn30.sh
+```
+
+**µD3TN Node (Optional):**
 ```bash
 # Terminal 1 - Start µD3TN daemon
 vagrant ssh ud3tn
 sudo -i
 source /vagrant/start.ud3tn_1.sh
 ```
-And then execute:
+Then, in another terminal, add an outgoing contact to the ION and IPN30 nodes:
 ```bash
 source /vagrant/start.ud3tn_2.sh
 ```
 
-**IPN30 Node:**
-```bash
-vagrant ssh ipn30
-sudo -i
-source /vagrant/start.ipn30.sh
-```
-
 4. **Install DTChat on ION and IPN30 nodes:**
+Install
 
 **ION Node:**
 ```bash
@@ -84,111 +86,104 @@ source /vagrant/install-dtchat_ipn30.sh
 
 ## Test Scenarios
 
-Each test scenario requires starting receivers on target nodes first, then using DTChat to send messages from the sender node.
+Each test scenario demonstrates bidirectional communication between nodes using DTChat GUI applications.
 
-### Scenario 1: ION → Others (µD3TN & IPN30)
+### Main Scenario : ION(DTChat) ↔ IPN30(DTChat)
+Launch DTChat on both nodes to send and receive messages bidirectionally via DTChat GUI
 
-**µD3TN (Receiver):**
+**ION (Launch DTChat):**
 ```bash
-vagrant ssh ud3tn
-sudo -i
-source /vagrant/ud3tn_receive.sh
+# vagrant ssh -c "sudo -i" ion
+cd /vagrant/DTChat
+cargo run
 ```
+
+**IPN30 (Launch DTChat):**
+```bash
+# vagrant ssh -c "sudo -i" ipn30
+cd /vagrant/DTChat
+cargo run
+```
+
+## For Troubleshooting via Terminal
+The following scenarios use command-line tools instead of DTChat for debugging and testing individual communication paths between nodes.
+
+
+### Scenario 1: ION → Others (IPN30 & µD3TN(Optional))
 
 **IPN30 (Receiver):**
 ```bash
-vagrant ssh ipn30
-sudo -i
+# vagrant ssh -c "sudo -i" ipn30
 source /vagrant/ipn30_receive.sh
-```
-
-**ION (Sender to UD3TN):**
-```bash
-vagrant ssh ion
-sudo -i
-source /vagrant/ion_send_to_ud3tn.sh
 ```
 
 **ION (Sender to IPN30):**
 ```bash
-vagrant ssh ion
-sudo -i
+# vagrant ssh -c "sudo -i" ion
 source /vagrant/ion_send_to_ipn30.sh
-```
-
-**ION (Sender with DTChat):**
-```bash
-vagrant ssh ion
-sudo -i
-cd /vagrant/DTChat
-cargo run
-```
-
-### Scenario 2: IPN30 → Others (ION & µD3TN)
-
-**ION (Receiver):**
-```bash
-vagrant ssh ion
-sudo -i
-source /vagrant/ion_receive.sh
 ```
 
 **µD3TN (Receiver):**
 ```bash
-vagrant ssh ud3tn
-sudo -i
-source /vagrant/ud3tnn_receive.sh
+# vagrant ssh -c "sudo -i" ud3tn
+source /vagrant/ud3tn_receive.sh
 ```
 
-**IPN30 (Sender to UD3TN):**
+**ION (Sender to UD3TN):**
 ```bash
-vagrant ssh ipn30
-sudo -i
-source /vagrant/ipn30_send_to_ud3tn.sh
+# vagrant ssh -c "sudo -i" ion
+source /vagrant/ion_send_to_ud3tn.sh
+```
+
+### Scenario 2: IPN30 → Others (ION & µD3TN(Optional))
+
+**ION (Receiver):**
+```bash
+# vagrant ssh -c "sudo -i" ion
+source /vagrant/ion_receive.sh
 ```
 
 **IPN30 (Sender to ION):**
 ```bash
-vagrant ssh ipn30
-sudo -i
+# vagrant ssh -c "sudo -i" ipn30
 source /vagrant/ipn30_send_to_ion.sh
 ```
 
-**IPN30 (Sender with DTChat):**
+**µD3TN (Receiver):**
 ```bash
-vagrant ssh ipn30
-sudo -i
-cd /vagrant/DTChat
-cargo run
+# vagrant ssh -c "sudo -i" ud3tn
+source /vagrant/ud3tnn_receive.sh
 ```
 
-### Scenario 3: µD3TN → Others (ION & IPN30)
+**IPN30 (Sender to µD3TN):**
+```bash
+# vagrant ssh -c "sudo -i" ipn30
+source /vagrant/ipn30_send_to_ud3tn.sh
+```
+
+### Scenario 3 (Optional): µD3TN → Others (ION & IPN30)
 
 **ION (Receiver):**
 ```bash
-vagrant ssh ion
-sudo -i
+# vagrant ssh -c "sudo -i" ion
 source /vagrant/ion_receive.sh
-```
-
-**IPN30 (Receiver):**
-```bash
-vagrant ssh ipn30
-sudo -i
-source /vagrant/ipn30_receive.sh
 ```
 
 **µD3TN (Sender to ION):**
 ```bash
-vagrant ssh ud3tn
-sudo -i
+# vagrant ssh -c "sudo -i" ud3tn
 source /vagrant/ud3tn_send_to_ion.sh
+```
+
+**IPN30 (Receiver):**
+```bash
+# vagrant ssh -c "sudo -i" ipn30
+source /vagrant/ipn30_receive.sh
 ```
 
 **µD3TN (Sender to IPN30):**
 ```bash
-vagrant ssh ud3tn
-sudo -i
+# vagrant ssh -c "sudo -i" ud3tn
 source /vagrant/ud3tn_send_to_ipn30.sh
 ```
 
