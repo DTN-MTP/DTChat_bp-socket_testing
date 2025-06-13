@@ -1,3 +1,6 @@
+
+## Ion VM :
+
 Vagrant.configure("2") do |config|
   config.vm.box = "generic/debian12"
   config.vm.box_version = "4.3.12"
@@ -49,21 +52,42 @@ Vagrant.configure("2") do |config|
     EOF
   end
 
+  # uD3TN
+
   config.vm.define "ud3tn" do |ud3tn|
     ud3tn.vm.provider :libvirt do |libvirt|
       libvirt.cpus = 2
       libvirt.memory = 2048
+      libvirt.graphics_type = "vnc"
+      libvirt.video_type = "qxl"
+      libvirt.keymap = "en-us"
     end
 
     ud3tn.vm.synced_folder ".", "/vagrant", type: "rsync", disable: true
     ud3tn.vm.network :private_network, ip: "192.168.50.20", libvirt__netmask: "255.255.255.0"
     ud3tn.vm.hostname = "ud3tn-node"
 
+    ud3tn.vm.provision "shell", reboot: true, inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get full-upgrade -y
+    EOF
+
+        # Install GUI
     ud3tn.vm.provision "shell", inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get install -y xfce4 xfce4-goodies lightdm qemu-guest-agent
+      systemctl enable lightdm
+    EOF
+
+
+    ud3tn.vm.provision "shell", inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
       apt-get update
       apt-get install -y curl git ca-certificates make build-essential libsqlite3-dev sqlite3 python3.11-venv
 
-      git clone --recursive https://gitlab.com/d3tn/ud3tn.git	
+      git clone --recursive https://gitlab.com/d3tn/ud3tn.git
       cd ud3tn
       make posix -j8
       make virtualenv
@@ -71,4 +95,48 @@ Vagrant.configure("2") do |config|
       make update-virtualenv
     EOF
   end
+
+  # 3rd VM to test
+  config.vm.define "ipn30" do |ipn30|
+    ipn30.vm.provider :libvirt do |libvirt|
+      libvirt.cpus = 4
+      libvirt.memory = 2048
+      libvirt.graphics_type = "vnc"
+      libvirt.video_type = "qxl"
+      libvirt.keymap = "en-us"
+    end
+
+    ipn30.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true, rsync__exclude: ".git/", rsync__args: ["--verbose", "--archive"]
+    ipn30.vm.network :private_network, ip: "192.168.50.30", libvirt__netmask: "255.255.255.0"
+    ipn30.vm.hostname = "ipn30-node"
+
+    ipn30.vm.provision "shell", reboot: true, inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get full-upgrade -y
+    EOF
+
+    # Install GUI
+    ipn30.vm.provision "shell", inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get install -y xfce4 xfce4-goodies lightdm qemu-guest-agent
+      systemctl enable lightdm
+    EOF
+
+    # Install ION DTN
+    ipn30.vm.provision "shell", inline: <<-EOF
+      export DEBIAN_FRONTEND=noninteractive
+      apt install -y curl git ca-certificates make pkg-config libnl-genl-3-dev libevent-dev build-essential linux-headers-$(uname -r)
+
+      cd /home/vagrant
+      wget -q https://github.com/nasa-jpl/ION-DTN/archive/refs/tags/ion-open-source-4.1.3.tar.gz
+      tar -zxf ion-open-source-4.1.3.tar.gz
+      cd ION-DTN-ion-open-source-4.1.3
+      make
+      make install
+    EOF
+  end
+
+
 end
