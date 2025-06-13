@@ -1,7 +1,7 @@
 # cd /vagrant/configs
-cd /vagrant/bp-socket/configs
+cd /vagrant/
 export LD_LIBRARY_PATH="/usr/local/lib"
-ionstart -I ./host.rc
+ionstart -I ./host10.rc
 
 # c) Build and insert the Bundle Protocol (BP) kernel module:
 

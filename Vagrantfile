@@ -17,7 +17,6 @@ Vagrant.configure("2") do |config|
       libvirt.memory = 2048
       libvirt.graphics_type = "vnc"
       libvirt.video_type = "qxl"
-      libvirt.keymap = "en-us"
     end
 
     ion.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true, rsync__exclude: ".git/", rsync__args: ["--verbose", "--archive"]
@@ -60,7 +59,6 @@ Vagrant.configure("2") do |config|
       libvirt.memory = 2048
       libvirt.graphics_type = "vnc"
       libvirt.video_type = "qxl"
-      libvirt.keymap = "en-us"
     end
 
     ud3tn.vm.synced_folder ".", "/vagrant", type: "rsync", disable: true
@@ -103,7 +101,6 @@ Vagrant.configure("2") do |config|
       libvirt.memory = 2048
       libvirt.graphics_type = "vnc"
       libvirt.video_type = "qxl"
-      libvirt.keymap = "en-us"
     end
 
     ipn30.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true, rsync__exclude: ".git/", rsync__args: ["--verbose", "--archive"]
