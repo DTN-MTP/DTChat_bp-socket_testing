@@ -1,0 +1,39 @@
+a_sabr : "../host2.rc"
+local_peer:
+    uuid: 10
+    name: ipn10
+    endpoints:
+      - type: Bp
+        address: "ipn:10.2"
+    color: 2
+# This is a local peer with multiple endpoints
+
+peer_list:
+  - uuid: 30
+    name: ipn30
+    endpoints:
+      - type: Bp
+        address: "ipn:30.2"
+    color: 2
+
+  - uuid: 20
+    name: ud3tn
+    endpoints:
+      - type: Bp
+        address: "ipn:20.2"
+    color: 2
+
+
+
+room_list:
+  - uuid: 0
+    name: room 1
+    participants:
+      - 30
+      - 10
+
+  - uuid: 1
+    name: room 2
+    participants:
+      - 10
+      - 30
