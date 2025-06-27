@@ -86,7 +86,7 @@ source /vagrant/install-dtchat_ipn30.sh
 
 ## Test Scenarios
 
-Each test scenario demonstrates bidirectional communication between nodes using DTChat GUI applications.
+Each test scenario demonstrates bidirectional communication between nodes using DTChat GUI applications. The tests are built to add artificial delays in order to test the Predicted Bundle Arrival Time calculation with A-SABR (initialized with the hostrc contact plans).
 
 ### Main Scenario : ION(DTChat) ↔ IPN30(DTChat)
 Launch DTChat on both nodes to send and receive messages bidirectionally via DTChat GUI
@@ -95,14 +95,14 @@ Launch DTChat on both nodes to send and receive messages bidirectionally via DTC
 ```bash
 # vagrant ssh -c "sudo -i" ion
 cd /vagrant/DTChat
-cargo run
+DTCHAT_ACK_DELAY_MS=3000 cargo run --features delayed_ack
 ```
 
 **IPN30 (Launch DTChat):**
 ```bash
 # vagrant ssh -c "sudo -i" ipn30
 cd /vagrant/DTChat
-cargo run
+DTCHAT_ACK_DELAY_MS=5000 cargo run --features delayed_ack
 ```
 
 ## For Troubleshooting via Terminal
