@@ -1,4 +1,4 @@
-a_sabr : "../host2.rc"
+a_sabr : "../host30.rc"
 local_peer:
     uuid: 30
     name: ipn30
@@ -14,14 +14,14 @@ peer_list:
     endpoints:
       - type: Bp
         address: "ipn:10.2"
-    color: 2
+    color: 1
 
   - uuid: 20
     name: ud3tn
     endpoints:
       - type: Bp
         address: "ipn:20.2"
-    color: 2
+    color: 3
 
 
 room_list:

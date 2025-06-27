@@ -1,11 +1,11 @@
-a_sabr : "../host2.rc"
+a_sabr : "../host10.rc"
 local_peer:
     uuid: 10
     name: ipn10
     endpoints:
       - type: Bp
         address: "ipn:10.2"
-    color: 2
+    color: 1
 # This is a local peer with multiple endpoints
 
 peer_list:
@@ -21,7 +21,7 @@ peer_list:
     endpoints:
       - type: Bp
         address: "ipn:20.2"
-    color: 2
+    color: 3
 
 
 
