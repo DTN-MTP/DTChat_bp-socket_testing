@@ -1,6 +1,6 @@
 
 ## begin ionadmin
-1 30 'host.ion30config'
+1 30 'host.ionconfig'
 s
 
 a contact +1 +86400 30 30 100000

@@ -1,16 +1,14 @@
 # cd /vagrant/configs
 cd /vagrant/
 export LD_LIBRARY_PATH="/usr/local/lib"
-ionstart -I ./host2.rc
+ionstart -I ./host30.rc
 
 # c) Build and insert the Bundle Protocol (BP) kernel module:
 
-cd /vagrant/bp-socket/src/kernel
+cd /vagrant/bp-socket/
 make
-insmod bp.ko
-
+insmod /vagrant/bp-socket/bp_socket/bp.ko
 # d) Build and launch the userspace daemon:
 
-cd /vagrant/bp-socket/src/daemon
-make
-./bp_daemon
+/vagrant/bp-socket/daemon/bp_daemon
+
